@@ -2,6 +2,16 @@
 
 This guide explains how to set up and work with this Arduino project using either Visual Studio Code with PlatformIO or the Arduino IDE.
 
+## Libraries Used
+
+This project includes the following libraries in the `lib/` folder:
+
+- **FreeRTOS** - Real-time operating system for multitasking and task scheduling
+- **KauLab** - Custom library for lab-specific functionality
+- **MakeBlockDrive** - Library for controlling MakeBlock motors and sensors (includes line following capabilities)
+
+These libraries are automatically included when cloning the repository and using PlatformIO in vscode. For Arduino IDE users, the libraries needs to be setup in the IDE.
+
 ## Quick Start (Recommended: VS Code + PlatformIO)
 
 ### Prerequisites

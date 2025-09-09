@@ -476,14 +476,14 @@ void MeEncoderOnBoard::setMotorPwm(int16_t pwm)
   if(pwm < 0)
   {
     digitalWrite(MeEncoderOnBoard::_Port_H1, LOW);
-    delayMicroseconds(5);
+    delayMicroseconds(2); //TODO: LOWERED DELAY FROM 5
     digitalWrite(MeEncoderOnBoard::_Port_H2, HIGH);
     analogWrite(MeEncoderOnBoard::_Port_PWM, abs(pwm));
   }
   else
   {
     digitalWrite(MeEncoderOnBoard::_Port_H1, HIGH);
-    delayMicroseconds(5);
+    delayMicroseconds(2); //TODO: LOWERED DELAY FROM 5
     digitalWrite(MeEncoderOnBoard::_Port_H2, LOW);
     analogWrite(MeEncoderOnBoard::_Port_PWM, abs(pwm));
   }

@@ -52,7 +52,7 @@
 #define configUSE_PREEMPTION                1
 
 #define configCPU_CLOCK_HZ                  ( ( uint32_t ) F_CPU )          // This F_CPU variable set by the environment
-#define configTICK_TYPE_WIDTH_IN_BITS       TICK_TYPE_WIDTH_16_BITS
+#define configTICK_TYPE_WIDTH_IN_BITS       TICK_TYPE_WIDTH_32_BITS //TODO: 32 bits to avoid integer overflow
 
 #define configMAX_PRIORITIES                4
 #define configMAX_TASK_NAME_LEN             16

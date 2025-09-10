@@ -93,11 +93,21 @@
 #ifndef MeConfig_H
 #define MeConfig_H
 
+extern unsigned long globalMillis(void);
+extern unsigned long globalMicros(void);
+
+
 #include <utility/Servo.h>
 #include <utility/Wire.h>
 #include <utility/EEPROM.h>
 #include <utility/SoftwareSerial.h>
 #include <utility/SPI.h>
+
+// AFTER all Arduino includes, NOW we can safely redefine
+#undef millis
+#undef micros
+#define millis()    globalMillis()
+#define micros()    globalMicros()
 
 #define ME_PORT_DEFINED
 

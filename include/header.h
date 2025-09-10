@@ -3,10 +3,23 @@
 
 #include "MeEncoderOnBoard.h"
 #include "MeRGBLed.h"
-#include <stdint.h>
+#include "MeUltrasonicSensor.h"
+#include "Arduino_FreeRTOS.h"
+
+//------------------------------------------
+extern unsigned long globalMillis(void);
+extern unsigned long globalMicros(void);
+void safePrint(const char* message);
+void safePrintln(const char* message);
+uint8_t zRobotGetLineSensor();
+void zInitialize();
+void zStart();
+void zScheduleTask(void *func, TickType_t interval, TickType_t runtime);
+void zTaskSetTrace(int trace);
+//-------------------------------------------
 
 
-#define MAX_OBS_DST 30.0 // in cm
+#define MAX_OBS_DST 20 // in cm
 #define ON_LINE_CIRCLE_RADIUS 60
 #define OFF_LINE_CIRCLE_RADIUS 40 //should be a little less than radius of track turn + car width
 

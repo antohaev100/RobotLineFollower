@@ -70,15 +70,14 @@ extern "C" {
 #undef portUSE_WDTO
 #define portUSE_TIMER0
 
-// Define 100kHz tick rate (0.01ms period)
-#define configTICK_RATE_HZ 100000
+#define configTICK_RATE_HZ 10000
 #define portTICK_PERIOD_MS  0
 
-// Timer0 configuration for 10kHz
+// Timer0 configuration for 100kHz
 // Formula: f = F_CPU / (PRESCALER * (1 + COUNTER_TOP))
-// For 10kHz with 16MHz: 16,000,000 / (1 * (1 + 159)) = 100,000 Hz
-#define TICK_COUNTER_TOP     159
-#define PRESCALER_1          (0 << CS02) | (0 << CS01) | (1 << CS00)
+// For 10kHz with 16MHz: 16,000,000 / (8 * (1 + 199)) = 10,000 Hz
+#define TICK_COUNTER_TOP     199
+#define TICK_PRESCALER       8
 // Timer0 register configurations
 #define NO_PWM              (0 << COM0A1) | (0 << COM0A0) | (0 << COM0B1) | (0 << COM0B0)
 #define MODE_CTC_TCCR0A     (1 << WGM01) | (0 << WGM00)

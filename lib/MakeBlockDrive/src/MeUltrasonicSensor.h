@@ -163,6 +163,54 @@ public:
  *   None
  */
   long measure(unsigned long = 30000);
+
+
+  //TODO: ADDED FAST VERSION
+  /**
+   * \par Function
+   *   distanceCmFast
+   * \par Description
+   *   Ultra-fast centimeters measurement with no safety checks or rate limiting
+   * \param[in]
+   *   MAXcm - The Max centimeters for timeout calculation (recommended: 10-50cm for best speed)
+   * \par Output
+   *   None
+   * \return
+   *   The distance measurement in centimeters, or MAXcm if timeout/no object
+   * \par Others
+   *   RESTRICTIONS:
+   *   - No rate limiting: Can be called continuously but may stress sensor
+   *   - No input validation: MAXcm should be 5-200cm (outside range may cause issues)  
+   *   - No caching: Every call triggers new measurement (high CPU usage if called rapidly)
+   *   - Blocking: Will block for up to (MAXcm * 70)μs waiting for echo
+   *   - Thread safety: Not thread-safe, don't call from multiple tasks simultaneously
+   *   PERFORMANCE: Optimized for MAXcm ≤ 40cm (sub-3ms measurements)
+   */
+  double distanceCmFast(uint16_t MAXcm = 40);
+
+
+    /**
+   * \par Function
+   *   measureFast  
+   * \par Description
+   *   Ultra-fast ultrasonic measurement with calculated timeout, no safety checks
+   * \param[in]
+   *   timeout - Timeout in microseconds (recommended: distance_cm * 70μs)
+   * \par Output
+   *   None
+   * \return
+   *   The duration value in microseconds, 0 if timeout
+   * \par Others
+   *   RESTRICTIONS:
+   *   - No rate limiting: Measures immediately every call (can stress sensor)
+   *   - No timeout validation: Values <500μs or >50000μs may cause undefined behavior
+   *   - Blocking operation: Will block thread for up to 'timeout' microseconds  
+   *   - Hardware dependent: Assumes s2 pin is properly configured
+   *   - No error handling: Hardware failures return 0 (indistinguishable from timeout)
+   *   PERFORMANCE: Direct hardware access, minimal overhead (~10μs + measurement time)
+   */
+  long measureFast(unsigned long timeout);
+
 private:
   volatile uint8_t  _SignalPin;
   volatile bool _measureFlag;

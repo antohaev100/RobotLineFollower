@@ -100,7 +100,7 @@ static void updateRobotOverEntry(const car_state* state){
 
 
 static void updateRobotObs(const car_state* state){
-    if(micros() - state->last_obs_avoid_time < 150000){ //150000us = 150ms for 60 degree turn
+    if(xTaskGetTickCount() - state->last_obs_avoid_time < 1500){ //1500 ticks = 150ms for 60 degree turn
         if(state->obs == OBS_ON_LEFT){
             turn_right();
             ledLeft(RED_C);

@@ -27,10 +27,24 @@ void loadingAnimationsLeds(color c){
     }
 }
 
-void ledRight(color c){
+void ledRight(color c, uint8_t ledCount){
     if(!useLeds) return;
     for(int i = 0; i < 12; i++) {
-        if(i >= 4 && i <= 6)
+        int dist = min(abs(i - 5), 12 - abs(i - 5));  // Shortest distance to center, handling wrap
+        if(dist <= ledCount) {
+            zLedRing.setColorAt(i, c.r, c.g, c.b);  // Set current LED to the color
+        } else {
+            zLedRing.setColorAt(i, OFF_C.r, OFF_C.g, OFF_C.b);  // Clear all LEDs
+        }
+    }
+    zLedRing.show();
+}
+
+void ledLeft(color c, uint8_t ledCount){
+    if(!useLeds) return;
+    for(int i = 0; i < 12; i++) {
+        int dist = min(abs(i - 11), 12 - abs(i - 11));  // Shortest distance to center, handling wrap
+        if(dist <= ledCount) 
             zLedRing.setColorAt(i, c.r, c.g, c.b); // Set current LED to the color
         else
             zLedRing.setColorAt(i, OFF_C.r, OFF_C.g, OFF_C.b); // Clear all LEDs
@@ -38,21 +52,11 @@ void ledRight(color c){
     zLedRing.show();
 }
 
-void ledLeft(color c){
+void ledFront(color c, uint8_t ledCount){
     if(!useLeds) return;
     for(int i = 0; i < 12; i++) {
-        if(i >= 10 || i == 0)
-            zLedRing.setColorAt(i, c.r, c.g, c.b); // Set current LED to the color
-        else
-            zLedRing.setColorAt(i, OFF_C.r, OFF_C.g, OFF_C.b); // Clear all LEDs
-    }
-    zLedRing.show();
-}
-
-void ledFront(color c){
-    if(!useLeds) return;
-    for(int i = 0; i < 12; i++) {
-        if(i >= 1 && i <= 3)
+        int dist = min(abs(i - 2), 12 - abs(i - 2));  // Shortest distance to center, handling wrap
+        if(dist <= ledCount) 
             zLedRing.setColorAt(i, c.r, c.g, c.b); // Set current LED to the color
         else
             zLedRing.setColorAt(i, OFF_C.r, OFF_C.g, OFF_C.b); // Clear all LEDs

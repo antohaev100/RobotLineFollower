@@ -5,21 +5,21 @@ static void updateRobotOnLine(const car_state* state){
     switch(state->on_line){
         case ON_LEFT:{
             speedup_circle_right(state->speedup_count);
-            ledRight(GREEN_C);
+            ledRight(GREEN_C, state->speedup_count);
             return;
         }
         case ON_MIDDLE_FROM_LEFT:{
             speedup_circle_left(state->speedup_count);
-            ledFront(GREEN_C);
+            ledFront(GREEN_C, state->speedup_count);
             return;
         }
         case ON_MIDDLE_FROM_RIGHT:{
             speedup_circle_right(state->speedup_count);
-            ledFront(GREEN_C);
+            ledFront(GREEN_C, state->speedup_count);
         }
         case ON_RIGHT:{
             speedup_circle_left(state->speedup_count);
-            ledLeft(GREEN_C);
+            ledLeft(GREEN_C, state->speedup_count);
             return;
         }
     }

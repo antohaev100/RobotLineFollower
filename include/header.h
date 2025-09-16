@@ -88,9 +88,9 @@ const color BLUE_C = {0,0,255};
 const color RED_C = {255,0,0};
 const color ORANGE_C = {255,165,0};
 void loadingAnimationsLeds(color c);
-void ledRight(color c);
-void ledLeft(color c);
-void ledFront(color c);
+void ledRight(color c, uint8_t ledCount = 1);
+void ledLeft(color c, uint8_t ledCount = 1);
+void ledFront(color c, uint8_t ledCount = 1);
 void ledBack(color c);
 
 #endif // HEADER_H

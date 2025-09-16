@@ -20,16 +20,24 @@ void zTaskSetTrace(int trace);
 
 
 #define MAX_OBS_DST 20 // in cm
-#define ON_LINE_CIRCLE_RADIUS 60
-#define OFF_LINE_CIRCLE_RADIUS 40 //should be a little less than radius of track turn + car width
+#define OBS_DST_WRONG_MARGIN 2
+#define OFF_LINE_CIRCLE_RADIUS 35 //should be a little less than radius of track turn + car width
+#define GOOD_ENTRY_CIRCLE_RADIUS 70
+#define MIN_ENTRY_COUNT 4 //adjust
+
+#define MAX_SPEEDUP_COUNT 4 //adjust
+#define START_SPEED 107 //adjust
+#define MAX_ITERATIONS_PER_SPEEDUP_COUNT 100 //adjust
+#define SPEEDUP_PER_COUNT (255-START_SPEED)/MAX_SPEEDUP_COUNT
+
 
 enum main_state { ON_LINE, OFF_LINE, ENTRY_GOOD, ENTRY_BAD, ENTRY_OVER };
 enum on_line_state { ON_LEFT, ON_MIDDLE_FROM_RIGHT, ON_MIDDLE_FROM_LEFT, ON_RIGHT };
-enum off_line_state { OFF_LEFT, OFF_RIGHT, OFF_UNKNOWN };
+enum off_line_state { OFF_LEFT, OFF_RIGHT };
 enum entry_good_state { ENTRY_GOOD_LEFT, ENTRY_GOOD_RIGHT, ENTRY_GOOD_UNKNOWN };
-enum entry_bad_state { ENTRY_BAD_LEFT, ENTRY_BAD_RIGHT, ENTRY_BAD_UNKNOWN };
+enum entry_bad_state { ENTRY_BAD_LEFT, ENTRY_BAD_RIGHT };
 enum entry_over_state { ENTRY_OVER_LEFT, ENTRY_OVER_RIGHT };
-enum obs_state { OBS_ON_LEFT, OBS_ON_RIGHT, OBS_CLEAR };
+enum obs_state { OBS_DANGER, OBS_CLEAR };
 struct car_state {
     main_state main;
     on_line_state on_line;
@@ -39,6 +47,8 @@ struct car_state {
     entry_over_state over_entry;
     obs_state obs;
     double last_obs_dst;
+    uint32_t stabilizing_iterator;
+    uint8_t speedup_count;
     unsigned long last_obs_avoid_time; //us
 };
 struct motor_speeds {
@@ -54,6 +64,7 @@ struct color {
 void updateRobot(const car_state* state);
 
 //line
+void StateSetup(const uint8_t lineValue, car_state* state);
 void handleLineValue(const uint8_t lineValue, car_state* state);
 
 //movement
@@ -64,9 +75,10 @@ void forward(uint8_t speed);
 void reverse(uint8_t speed);
 void circle_right(uint8_t radius);
 void circle_left(uint8_t radius);
-
-//utils
-obs_state where_obs(const car_state *state);
+void manual_circle_right(uint8_t rate);
+void manual_circle_left(uint8_t rate);
+void speedup_circle_right(uint8_t speedup_count);
+void speedup_circle_left(uint8_t speedup_count);
 
 //leds
 const color OFF_C = {0,0,0};

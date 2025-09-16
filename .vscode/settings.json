@@ -1,5 +1,13 @@
 {
     "files.associations": {
         "arduino_freertos.h": "c"
-    }
+    },
+    "geminicodeassist.chat.automaticScrolling": false,
+    "geminicodeassist.chat.enableStreaming": false,
+    "geminicodeassist.contextExclusionGitignore": false,
+    "geminicodeassist.enableTelemetry": false,
+    "geminicodeassist.enable": false,
+    "geminicodeassist.inlineSuggestions.nextEditPredictions": false,
+    "geminicodeassist.inlineSuggestions.enableAuto": false,
+    "geminicodeassist.localCodebaseAwareness": false
 }

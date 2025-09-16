@@ -15,9 +15,15 @@ void turn_right(){setMotorSpeed( motor_speeds{255, 255});}
 //1 degree per 2.5 ms
 void turn_left(){setMotorSpeed( motor_speeds{-255, -255});}
 //speed from 0 to 255 (1m/s)
-void forward(uint8_t speed){setMotorSpeed( motor_speeds{-255, +255});}
+void forward(uint8_t speed){setMotorSpeed( motor_speeds{(int16_t)-speed, (int16_t)+speed});}
 //speed from 0 to 255 (unknown m/s)
-void reverse(uint8_t speed){setMotorSpeed( motor_speeds{+255, -255});}
+void reverse(uint8_t speed){setMotorSpeed( motor_speeds{(int16_t)+speed, (int16_t)-speed});}
+//circling rate from 0 (max 20 cm radius) to 255 (inf radius)
+void manual_circle_right(uint8_t rate){setMotorSpeed( motor_speeds{(int16_t)rate, 255});}
+//circling rate from 0 (max 20 cm radius) to 255 (inf radius)
+void manual_circle_left(uint8_t rate){setMotorSpeed( motor_speeds{-255, (int16_t)-rate});}
+void speedup_circle_right(uint8_t speedup_count){setMotorSpeed( motor_speeds{(int16_t)-(START_SPEED+speedup_count*SPEEDUP_PER_COUNT), 255});}
+void speedup_circle_left(uint8_t speedup_count){setMotorSpeed( motor_speeds{-255, (int16_t)(START_SPEED+speedup_count*SPEEDUP_PER_COUNT)});}
 
 //radius in cm min 20 max 90
 void circle_right(uint8_t radius){

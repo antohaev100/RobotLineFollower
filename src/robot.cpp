@@ -4,17 +4,21 @@
 static void updateRobotOnLine(const car_state* state){
     switch(state->on_line){
         case ON_LEFT:{
-            circle_right(ON_LINE_CIRCLE_RADIUS);
+            speedup_circle_right(state->speedup_count);
             ledRight(GREEN_C);
             return;
         }
-        case ON_MIDDLE_FROM_LEFT:case ON_MIDDLE_FROM_RIGHT:{
-            forward(255);
+        case ON_MIDDLE_FROM_LEFT:{
+            speedup_circle_left(state->speedup_count);
             ledFront(GREEN_C);
             return;
         }
+        case ON_MIDDLE_FROM_RIGHT:{
+            speedup_circle_right(state->speedup_count);
+            ledFront(GREEN_C);
+        }
         case ON_RIGHT:{
-            circle_left(ON_LINE_CIRCLE_RADIUS);
+            speedup_circle_left(state->speedup_count);
             ledLeft(GREEN_C);
             return;
         }
@@ -33,23 +37,18 @@ static void updateRobotOffLine(const car_state* state){
             ledLeft(BLUE_C);
             return;
         }
-        case OFF_UNKNOWN:{
-            stop();
-            loadingAnimationsLeds(BLUE_C);
-            return;
-        }
     }
 }
 
 static void updateRobotGoodEntry(const car_state* state){
     switch(state->good_entry){
         case ENTRY_GOOD_LEFT:{
-            circle_left(OFF_LINE_CIRCLE_RADIUS);
+            circle_left(GOOD_ENTRY_CIRCLE_RADIUS);
             ledRight(NEON_C);
             return;
         }
         case ENTRY_GOOD_RIGHT:{
-            circle_right(OFF_LINE_CIRCLE_RADIUS);
+            circle_right(GOOD_ENTRY_CIRCLE_RADIUS); 
             ledLeft(NEON_C);
             return;
         }
@@ -64,20 +63,13 @@ static void updateRobotGoodEntry(const car_state* state){
 static void updateRobotBadEntry(const car_state* state){
     switch(state->bad_entry){
         case ENTRY_BAD_LEFT:{
-            //TODO:turn_left();
-            stop();
+            forward(64);
             ledLeft(ORANGE_C);
             return;
         }
         case ENTRY_BAD_RIGHT:{
-            //TODO:turn_right();
-            stop();
+            forward(64);
             ledRight(ORANGE_C);
-            return;
-        }
-        case ENTRY_BAD_UNKNOWN:{
-            stop();
-            loadingAnimationsLeds(ORANGE_C);
             return;
         }
     }
@@ -100,24 +92,11 @@ static void updateRobotOverEntry(const car_state* state){
 
 
 static void updateRobotObs(const car_state* state){
-    if(xTaskGetTickCount() - state->last_obs_avoid_time < 1500){ //1500 ticks = 150ms for 60 degree turn
-        if(state->obs == OBS_ON_LEFT){
-            turn_right();
-            ledLeft(RED_C);
-        } else {
-            turn_left();
-            ledRight(RED_C);
-        }
-        return;
+    ledRight(RED_C);
+    if(xTaskGetTickCount() - state->last_obs_avoid_time < 1350){ //1500 ticks = 150ms for 60 degree turn
+        turn_left();
     } else {
-        if(state->obs == OBS_ON_LEFT){
-            circle_left(state->last_obs_dst + 20);
-            ledLeft(RED_C);
-        } else {
-            circle_right(state->last_obs_dst + 20);
-            ledRight(RED_C);
-        }
-        return;
+        circle_right(state->last_obs_dst + 25);
     }
 }
 

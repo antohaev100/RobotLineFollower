@@ -14,6 +14,9 @@ void stop(){setMotorSpeed( motor_speeds{0, 0});}
 void turn_right(){setMotorSpeed( motor_speeds{255, 255});}
 //1 degree per 2.5 ms
 void turn_left(){setMotorSpeed( motor_speeds{-255, -255});}
+//example 128, 1 degree per 5 ms
+void manual_turn_right(uint8_t speed){setMotorSpeed( motor_speeds{(int16_t)speed, (int16_t)speed});}
+void manual_turn_left(uint8_t speed){setMotorSpeed( motor_speeds{(int16_t)-speed, (int16_t)-speed});}
 //speed from 0 to 255 (1m/s)
 void forward(uint8_t speed){setMotorSpeed( motor_speeds{(int16_t)-speed, (int16_t)+speed});}
 //speed from 0 to 255 (unknown m/s)

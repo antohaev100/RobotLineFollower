@@ -70,7 +70,9 @@ void handleLineValue(const uint8_t lineValue, car_state* state);
 //movement
 void stop();
 void turn_right();
+void manual_turn_right(uint8_t speed);
 void turn_left();
+void manual_turn_left(uint8_t speed);
 void forward(uint8_t speed);
 void reverse(uint8_t speed);
 void circle_right(uint8_t radius);

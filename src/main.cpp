@@ -9,11 +9,22 @@ static void readLineValue() {
     uint8_t lineValue = zRobotGetLineSensor();
     handleLineValue(lineValue, &state);
 }
-
+static unsigned long last_obs_good_dst_time = 0;
 static void readSensorValue(){
 	double sensorValue = zUltraSonicSensor.distanceCmFast(MAX_OBS_DST);
     if(sensorValue < MAX_OBS_DST-OBS_DST_WRONG_MARGIN){
         state.last_obs_dst = sensorValue;
+        if(state.obs_dst != OBS_GOOD || xTaskGetTickCount() - last_obs_good_dst_time > 400){
+            if((int)sensorValue == OBS_GOOD_DST){
+                state.obs_dst = OBS_GOOD;
+                last_obs_good_dst_time = xTaskGetTickCount();
+            }else if (sensorValue < OBS_GOOD_DST){
+                state.obs_dst = OBS_CLOSE;
+            } else {
+                state.obs_dst = OBS_FAR;
+            }
+        }
+
         state.obs = OBS_DANGER;
         state.last_obs_avoid_time = xTaskGetTickCount();
     }

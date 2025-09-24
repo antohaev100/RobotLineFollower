@@ -30,6 +30,8 @@ void zTaskSetTrace(int trace);
 #define MAX_ITERATIONS_PER_SPEEDUP_COUNT 100 //adjust
 #define SPEEDUP_PER_COUNT (255-START_SPEED)/MAX_SPEEDUP_COUNT
 
+#define OBS_GOOD_DST 10
+
 
 enum main_state { ON_LINE, OFF_LINE, ENTRY_GOOD, ENTRY_BAD, ENTRY_OVER };
 enum on_line_state { ON_LEFT, ON_MIDDLE_FROM_RIGHT, ON_MIDDLE_FROM_LEFT, ON_RIGHT };
@@ -38,6 +40,7 @@ enum entry_good_state { ENTRY_GOOD_LEFT, ENTRY_GOOD_RIGHT, ENTRY_GOOD_UNKNOWN };
 enum entry_bad_state { ENTRY_BAD_LEFT, ENTRY_BAD_RIGHT };
 enum entry_over_state { ENTRY_OVER_LEFT, ENTRY_OVER_RIGHT };
 enum obs_state { OBS_DANGER, OBS_CLEAR };
+enum obs_dst_state { OBS_GOOD, OBS_CLOSE, OBS_FAR};
 struct car_state {
     main_state main;
     on_line_state on_line;
@@ -47,9 +50,10 @@ struct car_state {
     entry_over_state over_entry;
     obs_state obs;
     double last_obs_dst;
-    uint32_t stabilizing_iterator;
+    uint32_t same_state_iterator;
     uint8_t speedup_count;
     unsigned long last_obs_avoid_time; //us
+    obs_dst_state obs_dst;
 };
 struct motor_speeds {
     int16_t right;  // Speed for the right motor (-255 to 255)

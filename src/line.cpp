@@ -2,13 +2,13 @@
 #include <stdint.h>
 
 static void speedup(car_state* state){
-    if(state->stabilizing_iterator < (uint32_t)(MAX_ITERATIONS_PER_SPEEDUP_COUNT * (state->speedup_count+1))){
+    if(state->same_state_iterator < (uint32_t)(MAX_ITERATIONS_PER_SPEEDUP_COUNT * (state->speedup_count+1))){
         if(state->speedup_count < MAX_SPEEDUP_COUNT)
             state->speedup_count++;
     } else {
         state->speedup_count = 0;
     }
-    state->stabilizing_iterator = 0;
+    state->same_state_iterator = 0;
 }
 
 static void handleLineValueOnLine(const uint8_t lineValue, car_state* state){
@@ -22,19 +22,19 @@ static void handleLineValueOnLine(const uint8_t lineValue, car_state* state){
                     break;
                 }
                 case 1:{
-                    state->stabilizing_iterator=0;
+                    state->same_state_iterator=0;
                     state->main = ON_LINE;
                     state->on_line = ON_RIGHT;
                     break;
                 }
                 case 2:{
-                    state->stabilizing_iterator++;
+                    state->same_state_iterator++;
                     state->main = ON_LINE;
                     state->on_line = ON_LEFT;
                     break;
                 }
                 case 3:{
-                    state->stabilizing_iterator=0;
+                    state->same_state_iterator=0;
                     state->speedup_count = 0;
                     state->main = OFF_LINE;
                     state->off_line = OFF_LEFT;
@@ -46,7 +46,7 @@ static void handleLineValueOnLine(const uint8_t lineValue, car_state* state){
         case ON_MIDDLE_FROM_RIGHT:{
             switch (lineValue) {
                 case 0:{
-                    state->stabilizing_iterator++;
+                    state->same_state_iterator++;
                     state->main = ON_LINE;
                     state->on_line = ON_MIDDLE_FROM_RIGHT;
                     break;
@@ -58,13 +58,13 @@ static void handleLineValueOnLine(const uint8_t lineValue, car_state* state){
                     break;
                 }
                 case 2:{
-                    state->stabilizing_iterator = 0;
+                    state->same_state_iterator = 0;
                     state->main = ON_LINE;
                     state->on_line = ON_LEFT;
                     break;
                 }
                 case 3:{
-                    state->stabilizing_iterator = 0;
+                    state->same_state_iterator = 0;
                     state->main = ENTRY_BAD;
                     state->bad_entry = ENTRY_BAD_RIGHT;
                     break;
@@ -75,13 +75,13 @@ static void handleLineValueOnLine(const uint8_t lineValue, car_state* state){
         case ON_MIDDLE_FROM_LEFT:{
             switch (lineValue) {
                 case 0:{
-                    state->stabilizing_iterator++;
+                    state->same_state_iterator++;
                     state->main = ON_LINE;
                     state->on_line = ON_MIDDLE_FROM_LEFT;
                     break;
                 }
                 case 1:{
-                    state->stabilizing_iterator=0;
+                    state->same_state_iterator=0;
                     state->main = ON_LINE;
                     state->on_line = ON_RIGHT;
                     break;
@@ -93,7 +93,7 @@ static void handleLineValueOnLine(const uint8_t lineValue, car_state* state){
                     break;
                 }
                 case 3:{
-                    state->stabilizing_iterator=0;
+                    state->same_state_iterator=0;
                     state->main = ENTRY_BAD;
                     state->bad_entry = ENTRY_BAD_LEFT;
                     break;
@@ -110,19 +110,19 @@ static void handleLineValueOnLine(const uint8_t lineValue, car_state* state){
                     break;
                 }
                 case 1:{
-                    state->stabilizing_iterator++;
+                    state->same_state_iterator++;
                     state->main = ON_LINE;
                     state->on_line = ON_RIGHT;
                     break;
                 }
                 case 2:{
-                    state->stabilizing_iterator=0;
+                    state->same_state_iterator=0;
                     state->main = ON_LINE;
                     state->on_line = ON_LEFT;
                     break;
                 }
                 case 3:{
-                    state->stabilizing_iterator=0;
+                    state->same_state_iterator=0;
                     state->speedup_count = 0;
                     state->main = OFF_LINE;
                     state->off_line = OFF_RIGHT;
@@ -140,12 +140,14 @@ static void handleLineValueOffLine(const uint8_t lineValue, car_state* state){
             switch (lineValue) {
                 case 0: case 1:{
                     state->obs = OBS_CLEAR;
+                    state->obs_dst = OBS_FAR;
                     state->main = ENTRY_BAD;
                     state->bad_entry = ENTRY_BAD_LEFT;
                     break;
                 }
                 case 2:{
                     state->obs = OBS_CLEAR;
+                    state->obs_dst = OBS_FAR;
                     state->main = ENTRY_GOOD;
                     state->good_entry = ENTRY_GOOD_LEFT;
                     break;
@@ -373,9 +375,10 @@ void handleLineValue(const uint8_t lineValue, car_state* state){
 }
 
 void StateSetup(const uint8_t lineValue, car_state* state){
+    state->obs_dst = OBS_FAR;
     state->obs = OBS_CLEAR;
     state->last_obs_dst = MAX_OBS_DST;
-    state->stabilizing_iterator = 0;
+    state->same_state_iterator = 0;
     state->speedup_count=0;
     switch (lineValue) {
         case 0:{

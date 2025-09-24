@@ -94,12 +94,31 @@ static void updateRobotOverEntry(const car_state* state){
 static void updateRobotObs(const car_state* state){
     ledRight(RED_C);
     unsigned long diff = xTaskGetTickCount() - state->last_obs_avoid_time;
-    if(diff < 2250){
-        manual_turn_left(128);
-    } else if (diff < 4500){
-        forward(128);
-    } else {
-        manual_turn_right(128);
+    switch(state->obs_dst){
+        case OBS_FAR:
+            if(diff < 1000){
+                forward(64);
+            } else {
+                manual_turn_right(128);
+            }
+            break;
+        case OBS_CLOSE:
+            if(diff < 1000){
+                reverse(64);
+            } else {
+                manual_turn_right(128);
+            }
+            break;
+            break;
+        case OBS_GOOD:
+            if(diff < 1000){
+                manual_turn_left(128);
+            } else if (diff < 2000){
+                forward(128);
+            } else {
+                manual_turn_right(128);
+            }
+            break;
     }
 }
 
